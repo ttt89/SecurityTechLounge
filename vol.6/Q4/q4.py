@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 
 from ctypes import *
+import sys
+
+if sys.maxsize != 2**63-1:
+  print("use x64")
+  exit()
 
 libc = CDLL('libc.so.6')
 
