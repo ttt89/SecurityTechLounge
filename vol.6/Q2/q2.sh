@@ -2,7 +2,12 @@
 
 chmod 755 ./ctf
 tcpdump -i lo -w ctf.pcap &
-sleep 1
+sleep 2
 ./ctf
+sleep 2
 kill $!
-./q2.py
+
+env python3 q2.py
+
+eog ctf.png &
+
