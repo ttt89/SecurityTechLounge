@@ -1,9 +1,15 @@
 if (-not(([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))) {
-    Start-Process powershell.exe  -Verb runas -ArgumentList "-NoExit", "-Command", "Set-ExecutionPolicy -Scope Process Bypass;", "&", $MyInvocation.MyCommand.Path;
+    Start-Process powershell.exe  -Verb runas -ArgumentList "-NoExit", "-Command", "Set-ExecutionPolicy -Scope Proces Bypass;", "&", $MyInvocation.MyCommand.Path;
     exit;
 }
 
-reg import reg
+cd (Split-Path $MyInvocation.MyCommand.Path -parent);
+if (Test-Path ".\reg" ) {
+    reg import reg;
+}else {
+    echo '"reg" file does not exist';
+    exit;
+}
 
 $code1 = Get-ItemProperty('hklm:\\Software\\Mandiant\\CTF')|Select-Object -ExpandProperty Mackerel;
 echo "`r`n###code1###`r`n";
@@ -14,7 +20,7 @@ echo $code2;
 $code3 = iex($code2.Replace('iex', 'echo'));
 echo "`r`n###code3###`r`n";
 echo $code3;
-$code4 = iex($code3.Replace('.  ${#}  (', ". echo ("));
+$code4 = iex($code3.Replace('.  ${#}  ', 'echo  '));
 echo "`r`n###code4###`r`n";
 echo $code4;
 $code5 = iex($code4.Replace('iex', 'echo'));
