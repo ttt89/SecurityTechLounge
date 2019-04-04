@@ -10,14 +10,17 @@ def b2i(bits):
   return ret
 
 def isplit(it, sep):
-  l = []
-  for e in it:
-    if e == sep:
-      yield l
-      l = []
-    else:
-      l.append(e)
-  yield l
+  it = iter(it)
+  run = True
+  def part():
+    for e in it:
+      if e == sep:
+        return
+      yield e
+    nonlocal run
+    run = False
+  while run:
+    yield list(part())
 
 p = pcapng.Reader(open("packet",'rb'))
 lenmap = {98:None, 99:0, 153:1}
